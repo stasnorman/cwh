@@ -2,7 +2,8 @@ import { View, Text } from "react-native";
 
 export function DetailsScreen() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View>
+        <View style={{ backgroundColor:'#000', height:20, color:'#000'}}/>
         <Text>Details Screen</Text>
       </View>
     );

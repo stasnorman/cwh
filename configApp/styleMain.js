@@ -47,5 +47,19 @@ export const styles = StyleSheet.create({
         fontSize: 26,
         alignSelf:'center',
         margin: 20
+    },
+    txbInputDesight:{
+      width: 300,
+      borderColor:'#a6a6a6',
+      borderWidth:2,
+      borderRadius:5,
+      margin:10,
+      alignSelf:'center'
+    },
+    logInDesight:{
+      backgroundColor:'#FFB800'
+    },
+    txtInBtnLogIn:{
+      fontWeight:'bold'
     }
   });

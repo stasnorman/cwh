@@ -15,6 +15,7 @@ export const styleHeader = StyleSheet.create({
         marginTop: 25, 
         fontWeight: "bold",
         padding: 10,
-        width: 150          
+        width: 150,
+        height:80
     },
     });
