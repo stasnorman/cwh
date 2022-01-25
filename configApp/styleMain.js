@@ -57,7 +57,13 @@ export const styles = StyleSheet.create({
       alignSelf:'center'
     },
     logInDesight:{
-      backgroundColor:'#FFB800'
+      backgroundColor:'#FFB800',
+      width: 200,
+      borderRadius:45,
+      height: 45,
+      alignSelf:'center',
+      alignItems:'center',
+      padding:13
     },
     txtInBtnLogIn:{
       fontWeight:'bold'
