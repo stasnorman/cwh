@@ -35,19 +35,34 @@ export function HomeScreen({ navigation }) {
          <TouchableOpacity style={styles.logInDesight} activeOpacity={0.5}
             onPress={
                 () => {
-                        if (input == 'lol') navigation.navigate('MainScreen')
-                        else Alert.alert('Уведомление','Неверная авторизация')
+                        try {
+                            if (input == 'lol') navigation.reset(
+                                {
+                                    index: 0,
+                                    routes: [{name: 'MainScreen'}]
+                                })
+                            else Alert.alert('Уведомление','Неверная авторизация')
+                        } catch (error) {
+                            alert(error)
+                        }
                     } 
                 }>            
             <Text style={styles.txtInBtnLogIn}>Log In</Text>
         </TouchableOpacity>
         
 
-        <Button title="Go to Details"
-          onPress={
-              () => navigation.navigate('Details')
-            }
-        />
+            <View style={{flexDirection:'row', alignSelf:'center'}}>
+                <Button title="Создать аккаунт"
+                onPress={
+                    () => navigation.navigate('Details')
+                    }
+                />
+                <Button title='Восстановить доступ' 
+                    onPress={
+                        () => navigation.navigate('RepeatePassword')
+                    }
+                />
+            </View>
       </View>
     );
   }
