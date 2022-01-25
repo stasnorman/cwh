@@ -6,7 +6,8 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 
 export function HomeScreen({ navigation }) {
-    const [input, setInput] = React.useState("");
+    const [loginUser, setUserName] = React.useState("");
+    const [passwordUser, setPassword] = React.useState("");
 
     return (
       <View >
@@ -27,16 +28,20 @@ export function HomeScreen({ navigation }) {
 
             <TextInput style={styles.txbInputDesight} placeholder="Email" keyboardType='email-address' name='txtEmail'
                 onChangeText={
-                    (login) => setInput(login)
+                    (login) => setUserName(login)
                 }
             />
-            <TextInput style={styles.txbInputDesight} placeholder="Password" keyboardType='default' />
+            <TextInput style={styles.txbInputDesight} placeholder="Password" keyboardType='default' secureTextEntry={true} 
+                onChangeText={
+                    (password) => setPassword(password)
+                }
+            />
 
          <TouchableOpacity style={styles.logInDesight} activeOpacity={0.5}
             onPress={
                 () => {
                         try {
-                            if (input == 'lol') navigation.reset(
+                            if ((loginUser == 'lol') && (passwordUser == '1') ) navigation.reset(
                                 {
                                     index: 0,
                                     routes: [{name: 'MainScreen'}]
