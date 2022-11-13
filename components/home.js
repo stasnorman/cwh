@@ -1,68 +1,138 @@
-import { View, Text, Button, TouchableOpacity, Image, Alert } from "react-native";
-import { styles } from "../configApp/styleMain";
-import { styleHeader } from "../configApp/style";
-import { TextInput } from "react-native-paper";
-import { StatusBar } from "expo-status-bar";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  Button,
+  Platform,
+  TextInput,
+} from "react-native";
+import Constants from "expo-constants";
 
-export function HomeScreen({ navigation }) {
-    const [input, setInput] = React.useState("");
 
-    return (
-      <View >
-        <View style={{ backgroundColor:'#000', height:20, color:'#000'}}/>
-        <View><Text style={styleHeader.beautyStyleLogo}> CWH </Text></View>
-        <Text style={styleHeader.headerText}>Login</Text>
-        <TouchableOpacity
-            style={styles.buttonFacebookStyle}
-            activeOpacity={0.5}
-            onPress={() => Alert.alert('Button with adjusted color pressed')}>
-            <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/488px-Apple_logo_black.svg.png' }} style={styles.buttonImageIconStyle}
-            />
-            <View style={styles.buttonIconSeparatorStyle} />
-            <Text style={styles.buttonTextStyle}>CONTINUE WITH APPLE</Text>
-        </TouchableOpacity>
+export function HomeScreen({navigation}) {
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [role_id, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-            <Text style={styles.styleOR}>OR</Text>
+  const onLoginHandler = (login) => {
+    setLogin(login);
+  };
 
-            <TextInput style={styles.txbInputDesight} placeholder="Email" keyboardType='email-address' name='txtEmail'
-                onChangeText={
-                    (login) => setInput(login)
-                }
-            />
-            <TextInput style={styles.txbInputDesight} placeholder="Password" keyboardType='default' />
+  const onPasswordHandler = (password) => {
+    setPassword(password);
+  };
 
-         <TouchableOpacity style={styles.logInDesight} activeOpacity={0.5}
-            onPress={
-                () => {
-                        try {
-                            if (input == 'lol') navigation.reset(
-                                {
-                                    index: 0,
-                                    routes: [{name: 'MainScreen'}]
-                                })
-                            else Alert.alert('Уведомление','Неверная авторизация')
-                        } catch (error) {
-                            alert(error)
-                        }
-                    } 
-                }>            
-            <Text style={styles.txtInBtnLogIn}>Log In</Text>
-        </TouchableOpacity>
-        
+  const onRoleHandler = (role_id) => {
+    setRole(role_id);
+  };
 
-            <View style={{flexDirection:'row', alignSelf:'center'}}>
-                <Button title="Создать аккаунт"
-                onPress={
-                    () => navigation.navigate('Details')
-                    }
-                />
-                <Button title='Восстановить доступ' 
-                    onPress={
-                        () => navigation.navigate('RepeatePassword')
-                    }
-                />
-            </View>
+  const onSubmitFormHandler = async (event) => {
+    if (!login.trim() || !password.trim()) {
+      alert("Некорректные данные ввода Имени и Емейла");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`https://test-api.easy4.ru/create-user`, {
+   
+          login,
+          password,
+          role_id: "Клиент",
+             
+      });
+      if (response.status === 200) {
+        navigation.reset(
+            {
+                index: 0,
+                routes: [{name: 'MainScreen'}]
+            });
+        setIsLoading(false);
+        setLogin('');
+        setPassword('');
+        setRole('');
+      } else {
+        throw new Error("Данные невозможно получить");
+      }
+    } catch (error) {
+      alert("Данные невозможно получить");
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View>
+        <View style={styles.wrapper}>
+          {isLoading ? (
+            <Text style={styles.formHeading}>Отправка данных </Text>
+          ) : (
+            <Text style={styles.formHeading}>Создать нового пользователя</Text>
+          )}
+        </View>
+        <View style={styles.wrapper}>
+          <TextInput
+            placeholder="Введите логин"
+            placeholderTextColor="#ffffff"
+            style={styles.input}
+            value={login}
+            editable={!isLoading}
+            onChangeText={onLoginHandler}
+          />
+        </View>
+
+        <View style={styles.wrapper}>
+          <TextInput
+            placeholder="Введите пароль"
+            placeholderTextColor="#ffffff"
+            style={styles.input}
+            value={password}
+            editable={!isLoading}
+            onChangeText={onPasswordHandler}
+          />
+        </View>
+
+        <View>
+          <Button
+            title="Отправить"
+            onPress={onSubmitFormHandler}
+            style={styles.submitButton}
+            disabled={isLoading}
+          />
+        </View>
       </View>
-    );
-  }
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#252526",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+  },
+  formHeading: {
+    color: "#ffffff",
+  },
+  wrapper: {
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: "grey",
+    minWidth: 200,
+    textAlignVertical: "center",
+    paddingLeft: 10,
+    borderRadius: 20,
+    color: "#ffffff",
+  },
+  submitButton: {
+    backgroundColor: "gray",
+    padding: 100,
+  },
+});
